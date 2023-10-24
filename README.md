@@ -1,1 +1,1 @@
-# LandRight
+# NFTLand
