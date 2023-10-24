@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract NFTLand is ERC721, ERC165, Ownable {
+contract NFTLand is ERC165, ERC721, Ownable {
     uint256 public tokenCounter;
     mapping(uint256 => uint256) public certificateLandNumberToTokenId;
     mapping(uint256 => uint256) public tokenIdToPrice;
     mapping(uint256 => bool) public tokenIdToIsForSale;
 
-    constructor() ERC721("NFTLand", "NFTL") {}
+    constructor(address initialOwner) ERC721("NFTLand", "NFTL") Ownable(initialOwner) {}
 
     function mintNFTFromCertificateLandNumber(uint256 certificateLandNumber, string memory tokenURI) public onlyOwner returns (uint256) {
         require(certificateLandNumberToTokenId[certificateLandNumber] == 0, "NFTLand: NFT with this certificate land number already exists");
@@ -56,40 +56,35 @@ contract NFTLand is ERC721, ERC165, Ownable {
         tokenIdToIsForSale[tokenId] = false;
     }
 
-    event Transfer (
-        address indexed _from,
-        address indexed _to,
-        uint256 indexed _tokenId
-    );
-    
-    event Approval (
-        address indexed _owner,
-        address indexed _approved,
-        uint256 indexed _tokenId
-    );
+     function _exists(uint256 tokenId) internal view returns (bool) {
+        return _exists(tokenId);
+    }
 
+    function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
+        _setTokenURI(tokenId, _tokenURI);
+    }
 
-    function balanceOf(address owner) public view returns (uint256) {
+    function balanceOf(address owner) public view override returns (uint256) {
         return balanceOf(owner);
     }
 
-    function ownerOf(uint256 tokenId) public view returns (address) {
+    function ownerOf(uint256 tokenId) public view override returns (address) {
         return ownerOf(tokenId);
     }
 
-    function getApproved(uint256 tokenId) public view returns (address) {
+    function getApproved(uint256 tokenId) public view override returns (address) {
         return getApproved(tokenId);
     }
 
-    function isApprovedForAll(address owner, address operator) public view returns (bool) {
+    function isApprovedForAll(address owner, address operator) public view override returns (bool) {
         return isApprovedForAll(owner, operator);
     }
 
-    function setApprovalForAll(address operator, bool _approved) public {
+    function setApprovalForAll(address operator, bool _approved) public override {
         setApprovalForAll(operator, _approved);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public {
+    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public override {
         safeTransferFrom(from, to, tokenId, data);
     }
 
